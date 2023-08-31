@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.css": "/8bitart/static/css/main.837a0a07.css",
+    "main.js": "/8bitart/static/js/main.926988b2.js",
+    "index.html": "/8bitart/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.837a0a07.css",
+    "static/js/main.926988b2.js"
+  ]
+}
