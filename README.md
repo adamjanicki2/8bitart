@@ -1,3 +1,3 @@
-# react-skeleton
+# 8bitart
 
-Static react app skeleton
+React drawing tool
