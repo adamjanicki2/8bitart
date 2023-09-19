@@ -24,6 +24,12 @@ const COLORS = [
   "#A463F1",
   // pink
   "#D5008E",
+  // light colors
+  "#FF725C",
+  "#FBF1A9",
+  "#9EEBCF",
+  "#96CCFF",
+  "#FFDFDF",
 ] as const;
 
 const ColorPicker = ({ color, onColorChange }: Props) => {
