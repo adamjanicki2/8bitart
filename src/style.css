@@ -23,3 +23,7 @@ body {
 .bordering {
   border: 1px solid green;
 }
+
+.dim-button:hover {
+  opacity: 0.7;
+}

@@ -4,17 +4,24 @@ type Props = {
   pixel: PixelType;
   size: number | string;
   onColorChange: (force?: boolean) => void;
+  row: number;
+  col: number;
 };
 
-const Pixel = ({ pixel, onColorChange, size }: Props) => (
+const EMPTY_COLOR_MAP = {
+  0: "#F4F4F4",
+  1: "#ccc",
+} as const;
+
+const Pixel = ({ pixel, onColorChange, size, row, col }: Props) => (
   <div
     onMouseEnter={() => onColorChange()}
-    onTouchMove={() => onColorChange()}
-    onClick={() => onColorChange(true)}
+    onMouseDown={() => onColorChange(true)}
     style={{
       width: size,
       height: size,
-      backgroundColor: pixel.color,
+      backgroundColor:
+        pixel.color || EMPTY_COLOR_MAP[(row + col) % 2 === 0 ? 0 : 1],
     }}
   />
 );

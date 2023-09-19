@@ -1,5 +1,5 @@
 type Pixel = {
-  color: string;
+  color: string | null;
 };
 
 type Grid = Pixel[][];

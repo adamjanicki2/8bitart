@@ -1,35 +1,50 @@
+import { BlockPicker } from "react-color";
+
 type Props = {
   color: string;
   onColorChange: (color: string) => void;
 };
 
 const COLORS = [
-  "red",
-  "green",
-  "blue",
-  "yellow",
-  "cyan",
-  "magenta",
-  "black",
-  "white",
+  "#000000",
+  "#F4F4F4",
+  // gray
+  "#999999",
+  // red
+  "#E7040E",
+  // gold
+  "#FFB701",
+  // yellow
+  "#FFD701",
+  // green
+  "#19A975",
+  // blue
+  "#357EDE",
+  // purple
+  "#A463F1",
+  // pink
+  "#D5008E",
 ] as const;
 
 const ColorPicker = ({ color, onColorChange }: Props) => {
   return (
-    <div className="flex items-center flex-wrap mv2 mb3">
-      {COLORS.map((c) => (
-        <div
-          className="pointer"
-          key={c}
-          style={{
-            width: 32,
-            height: 32,
-            backgroundColor: c,
-            border: color === c ? "3px solid black" : "none",
-          }}
-          onClick={() => onColorChange(c)}
-        />
-      ))}
+    <div style={{ borderRadius: "4px", border: "1px solid rgba(0,0,0,0.25)" }}>
+      <BlockPicker
+        triangle="hide"
+        color={color}
+        onChange={(c) => onColorChange(c.hex)}
+        colors={[...COLORS]}
+        styles={{
+          default: {
+            card: {
+              boxShadow: "none",
+            },
+            head: {
+              borderRadius: "3px 3px 0 0",
+            },
+          },
+        }}
+      />
     </div>
   );
 };
