@@ -27,3 +27,17 @@ body {
 .dim-button:hover {
   opacity: 0.7;
 }
+
+.alt-button {
+  background-color: transparent;
+  transition: background-color var(--ajui-default-transition);
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .alt-button:not(:disabled):hover,
+  .alt-button:not(:disabled):focus-visible {
+    background-color: #eee;
+    opacity: 1;
+  }
+}

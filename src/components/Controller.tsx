@@ -1,3 +1,4 @@
+import { UnstyledButton } from "@adamjanicki/ui";
 import {
   faBucket,
   faDownload,
@@ -9,9 +10,16 @@ import { useState, useEffect } from "react";
 import ColorPicker from "src/components/ColorPicker";
 import Grid from "src/components/Grid";
 import IconButton from "src/components/IconButton";
+import Menu from "src/components/Menu";
 import SizeSelector from "src/components/SizeSelector";
 import type { GridSize, Pixel } from "src/types";
-import { downloadImage, fillGrid, getScreenSize, initPixels } from "src/util";
+import {
+  downloadImageAsPng,
+  downloadImageAsSvg,
+  fillGrid,
+  getScreenSize,
+  initPixels,
+} from "src/util";
 
 const DEFAULT_COLOR = "#000000";
 const DEFAULT_GRID_SIZE = 16;
@@ -84,10 +92,30 @@ const Controller = () => {
               onClick={() => setGrid(initPixels(gridSize))}
               label="Clear"
             />
-            <IconButton
-              icon={faDownload}
-              onClick={() => downloadImage(grid)}
-              label="Download"
+            <Menu
+              trigger={
+                <div>
+                  <IconButton
+                    icon={faDownload}
+                    onClick={() => {}}
+                    label="Download"
+                  />
+                </div>
+              }
+              items={[
+                <UnstyledButton
+                  className="pa3 br3 alt-button"
+                  onClick={() => downloadImageAsPng(grid)}
+                >
+                  Download as .png
+                </UnstyledButton>,
+                <UnstyledButton
+                  className="pa3 br3 alt-button"
+                  onClick={() => downloadImageAsSvg(grid)}
+                >
+                  Download as .svg
+                </UnstyledButton>,
+              ]}
             />
           </div>
         </div>

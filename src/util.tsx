@@ -29,7 +29,7 @@ const hexToRgba = (hex: string) => {
   return [r, g, b, 255];
 };
 
-export const downloadImage = (grid: Grid) => {
+export const downloadImageAsPng = (grid: Grid) => {
   const size = grid.length;
   const canvas = document.createElement("canvas");
   canvas.width = size;
@@ -49,4 +49,40 @@ export const downloadImage = (grid: Grid) => {
   link.href = canvas.toDataURL("image/png");
   link.download = "8bitart.png";
   link.click();
+};
+
+export const downloadImageAsSvg = (grid: Grid) => {
+  const size = grid.length;
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("width", size.toString());
+  svg.setAttribute("height", size.toString());
+  svg.setAttribute("xmlns", svgNS);
+
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      const color = grid[i][j].color || "transparent";
+      const rect = document.createElementNS(svgNS, "rect");
+      rect.setAttribute("x", j.toString());
+      rect.setAttribute("y", i.toString());
+      rect.setAttribute("width", "1");
+      rect.setAttribute("height", "1");
+      rect.setAttribute("fill", color);
+      svg.appendChild(rect);
+    }
+  }
+
+  // Serialize SVG and create a download link
+  const serializer = new XMLSerializer();
+  const svgBlob = new Blob([serializer.serializeToString(svg)], {
+    type: "image/svg+xml",
+  });
+  const svgUrl = URL.createObjectURL(svgBlob);
+  const link = document.createElement("a");
+  link.href = svgUrl;
+  link.download = "8bitart.svg";
+  link.click();
+
+  // Clean up the object URL
+  URL.revokeObjectURL(svgUrl);
 };
