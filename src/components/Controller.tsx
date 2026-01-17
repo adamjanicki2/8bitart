@@ -1,16 +1,10 @@
-import { UnstyledButton } from "@adamjanicki/ui";
-import {
-  faBucket,
-  faDownload,
-  faEraser,
-  faPen,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect } from "react";
+import { Box, Popover, ui, UnstyledButton } from "@adamjanicki/ui";
+import { download, edit, trash, xCircle } from "@adamjanicki/ui/icons";
+import { IconType } from "@adamjanicki/ui/types/icon";
+import { useEffect, useState } from "react";
 import ColorPicker from "src/components/ColorPicker";
 import Grid from "src/components/Grid";
 import IconButton from "src/components/IconButton";
-import Menu from "src/components/Menu";
 import SizeSelector from "src/components/SizeSelector";
 import type { GridSize, Pixel } from "src/types";
 import {
@@ -21,19 +15,21 @@ import {
   initPixels,
 } from "src/util";
 
-const DEFAULT_COLOR = "#000000";
+const DEFAULT_COLOR = "000000";
 const DEFAULT_GRID_SIZE = 16;
 
-const Controller = () => {
-  const [mode, setMode] = useState<"draw" | "fill" | "erase">("draw");
+const fillIcon = "M0 0H16V16H0Z" as IconType;
+
+export default function Controller() {
+  const [mode, setMode] = useState<"draw" | "erase">("draw");
   const [draw, setDraw] = useState(false);
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [gridSize, setGridSize] = useState<GridSize>(DEFAULT_GRID_SIZE);
   const [grid, setGrid] = useState<Pixel[][]>(() => initPixels(gridSize));
   const [screenSize, setScreenSize] = useState(getScreenSize);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setDraw(false);
     const handleMouseDown = () => setDraw(true);
     const handleMouseUp = () => setDraw(false);
     const handleResize = () => setScreenSize(getScreenSize());
@@ -48,11 +44,11 @@ const Controller = () => {
   }, []);
 
   return (
-    <div className="flex flex-column items-center pa2">
-      <h1 className="f2 mv1">8-Bit Art</h1>
-      <div className="flex flex-wrap justify-center">
-        <div className="flex flex-column mh3 items-center">
-          <div className="flex items-center">
+    <Box vfx={{ axis: "y", align: "center", padding: "s" }}>
+      <ui.h1 vfx={{ marginY: "xs" }}>8-Bit Art</ui.h1>
+      <Box vfx={{ axis: "x", wrap: true, justify: "center", gap: "l" }}>
+        <Box vfx={{ axis: "y", align: "center", gap: "s" }}>
+          <Box vfx={{ axis: "x", align: "center" }}>
             <SizeSelector
               gridSize={gridSize}
               setGridSize={(gridSize) => {
@@ -60,86 +56,86 @@ const Controller = () => {
                 setGrid(initPixels(gridSize));
               }}
             />
-          </div>
+          </Box>
           <ColorPicker
             color={color}
             onColorChange={(color) => {
               setColor(color);
-              mode === "erase" && setMode("draw");
+              if (mode === "erase") setMode("draw");
             }}
           />
-          <div className="flex items-center">
+          <Box vfx={{ axis: "x", align: "center", gap: "xs" }}>
             <IconButton
-              icon={faPen}
+              icon={edit}
               onClick={() => setMode("draw")}
               label="Draw"
               selected={mode === "draw"}
             />
             <IconButton
-              icon={faEraser}
+              icon={xCircle}
               onClick={() => setMode("erase")}
               label="Erase"
               selected={mode === "erase"}
             />
             <IconButton
-              icon={faBucket}
-              onClick={() => setMode("fill")}
+              icon={fillIcon}
+              onClick={() => setGrid((grid) => fillGrid(grid, color))}
               label="Fill"
-              selected={mode === "fill"}
+              selected={false}
+              style={{ color: `#${color}`, boxShadow: "inset 0 0 0 1px black" }}
             />
             <IconButton
-              icon={faTrash}
+              icon={trash}
               onClick={() => setGrid(initPixels(gridSize))}
               label="Clear"
             />
-            <Menu
-              trigger={
-                <div>
-                  <IconButton
-                    icon={faDownload}
-                    onClick={() => {}}
-                    label="Download"
-                  />
-                </div>
+            <Popover
+              offset={2}
+              vfx={{ axis: "y", padding: "xs" }}
+              open={open}
+              onClose={() => setOpen(false)}
+              anchor={
+                <IconButton
+                  icon={download}
+                  label="Download"
+                  selected={false}
+                  onClick={() => setOpen((open) => !open)}
+                />
               }
-              items={[
-                <UnstyledButton
-                  className="pa3 br3 alt-button"
-                  onClick={() => downloadImageAsPng(grid)}
-                >
-                  Download as .png
-                </UnstyledButton>,
-                <UnstyledButton
-                  className="pa3 br3 alt-button"
-                  onClick={() => downloadImageAsSvg(grid)}
-                >
-                  Download as .svg
-                </UnstyledButton>,
-              ]}
-            />
-          </div>
-        </div>
+            >
+              <UnstyledButton
+                vfx={{ padding: "s", radius: "rounded", hover: "shade" }}
+                onClick={() => downloadImageAsPng(grid)}
+              >
+                Download as .png
+              </UnstyledButton>
+              <UnstyledButton
+                vfx={{ padding: "s", radius: "rounded", hover: "shade" }}
+                onClick={() => downloadImageAsSvg(grid)}
+              >
+                Download as .svg
+              </UnstyledButton>
+            </Popover>
+          </Box>
+        </Box>
         <Grid
           grid={grid}
           pixelSize={Math.floor(
             (Math.min(screenSize.width, screenSize.height) * 0.8) / gridSize
           )}
-          onColorChange={(row, col, force) => {
-            if (mode !== "fill" && (draw || force)) {
-              grid[row][col].color = mode === "draw" ? color : null;
-              setGrid([...grid]);
-            }
-          }}
-          onBucketFill={() => {
-            if (mode === "fill") {
-              setGrid(fillGrid(grid, color));
-              setMode("draw");
-            }
-          }}
+          onColorChange={(row, col, force) =>
+            setGrid((grid) => {
+              if (!draw && !force) return grid;
+              const nextGrid = grid.map((gridRow) => gridRow.slice());
+              nextGrid[row][col] = {
+                ...nextGrid[row][col],
+                color: mode === "draw" ? color : null,
+              };
+              return nextGrid;
+            })
+          }
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
-};
-
-export default Controller;
+}

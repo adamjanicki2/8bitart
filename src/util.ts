@@ -1,4 +1,4 @@
-import type { GridSize, Grid } from "src/types";
+import type { Grid, GridSize } from "src/types";
 
 export const initPixels = (gridSize: GridSize): Grid => {
   const pixels: Grid = [];
@@ -21,7 +21,8 @@ export const getScreenSize = () => ({
   height: window.innerHeight,
 });
 const hexToRgba = (hex: string) => {
-  const bigint = parseInt(hex.slice(1), 16);
+  const normalized = hex.startsWith("#") ? hex.slice(1) : hex;
+  const bigint = parseInt(normalized, 16);
   if (isNaN(bigint)) return [0, 0, 0, 255];
   const r = (bigint >> 16) & 255;
   const g = (bigint >> 8) & 255;
@@ -61,7 +62,7 @@ export const downloadImageAsSvg = (grid: Grid) => {
 
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
-      const color = grid[i][j].color || "transparent";
+      const color = grid[i][j].color ? `#${grid[i][j].color}` : "transparent";
       const rect = document.createElementNS(svgNS, "rect");
       rect.setAttribute("x", j.toString());
       rect.setAttribute("y", i.toString());
