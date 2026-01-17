@@ -9,7 +9,12 @@ type Props = {
   onBucketFill: () => void;
 };
 
-const Grid = ({ grid, onColorChange, pixelSize, onBucketFill }: Props) => {
+export default function Grid({
+  grid,
+  onColorChange,
+  pixelSize,
+  onBucketFill,
+}: Props) {
   return (
     <Box
       vfx={{ axis: "y", border: true, borderColor: "primary" }}
@@ -31,6 +36,4 @@ const Grid = ({ grid, onColorChange, pixelSize, onBucketFill }: Props) => {
       ))}
     </Box>
   );
-};
-
-export default Grid;
+}

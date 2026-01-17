@@ -24,7 +24,7 @@ const COLORS = [
   "#FFDFDF",
 ] as const;
 
-const ColorPicker = ({ color, onColorChange }: Props) => {
+export default function ColorPicker({ color, onColorChange }: Props) {
   return (
     <Box vfx={{ radius: "rounded" }}>
       <BlockPicker
@@ -45,6 +45,4 @@ const ColorPicker = ({ color, onColorChange }: Props) => {
       />
     </Box>
   );
-};
-
-export default ColorPicker;
+}

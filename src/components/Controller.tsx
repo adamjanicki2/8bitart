@@ -20,7 +20,7 @@ const DEFAULT_GRID_SIZE = 16;
 
 const fillIcon = "M0 0H16V16H0Z" as IconType;
 
-const Controller = () => {
+export default function Controller() {
   const [mode, setMode] = useState<"draw" | "fill" | "erase">("draw");
   const [draw, setDraw] = useState(false);
   const [color, setColor] = useState(DEFAULT_COLOR);
@@ -140,6 +140,4 @@ const Controller = () => {
       </Box>
     </Box>
   );
-};
-
-export default Controller;
+}

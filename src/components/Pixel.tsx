@@ -9,21 +9,21 @@ type Props = {
   col: number;
 };
 
-const EMPTY_COLOR_MAP = {
+const EMPTY_COLOR_MAP: Record<number, string> = {
   0: "#F4F4F4",
   1: "#ccc",
-} as const;
+};
 
-const Pixel = ({ pixel, onColorChange, size, row, col }: Props) => (
-  <Box
-    onMouseEnter={() => onColorChange()}
-    onMouseDown={() => onColorChange(true)}
-    style={{
-      width: size,
-      height: size,
-      backgroundColor:
-        pixel.color || EMPTY_COLOR_MAP[(row + col) % 2 === 0 ? 0 : 1],
-    }}
-  />
-);
-export default Pixel;
+export default function Pixel({ pixel, row, col, onColorChange, size }: Props) {
+  return (
+    <Box
+      onMouseEnter={() => onColorChange()}
+      onMouseDown={() => onColorChange(true)}
+      style={{
+        width: size,
+        height: size,
+        backgroundColor: pixel.color || EMPTY_COLOR_MAP[(row + col) & 1],
+      }}
+    />
+  );
+}
