@@ -1,5 +1,6 @@
-import type { Grid as GridType } from "src/types";
+import { Box } from "@adamjanicki/ui";
 import Pixel from "src/components/Pixel";
+import type { Grid as GridType } from "src/types";
 
 type Props = {
   grid: GridType;
@@ -10,9 +11,12 @@ type Props = {
 
 const Grid = ({ grid, onColorChange, pixelSize, onBucketFill }: Props) => {
   return (
-    <div className="flex flex-column grid-border" onClick={onBucketFill}>
+    <Box
+      vfx={{ axis: "y", border: true, borderColor: "primary" }}
+      onClick={onBucketFill}
+    >
       {grid.map((row, i) => (
-        <div className="flex" key={i}>
+        <Box vfx={{ axis: "x" }} key={i}>
           {row.map((pixel, j) => (
             <Pixel
               key={j}
@@ -23,9 +27,9 @@ const Grid = ({ grid, onColorChange, pixelSize, onBucketFill }: Props) => {
               size={pixelSize}
             />
           ))}
-        </div>
+        </Box>
       ))}
-    </div>
+    </Box>
   );
 };
 

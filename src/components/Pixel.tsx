@@ -1,3 +1,4 @@
+import { Box } from "@adamjanicki/ui";
 import type { Pixel as PixelType } from "src/types";
 
 type Props = {
@@ -14,7 +15,7 @@ const EMPTY_COLOR_MAP = {
 } as const;
 
 const Pixel = ({ pixel, onColorChange, size, row, col }: Props) => (
-  <div
+  <Box
     onMouseEnter={() => onColorChange()}
     onMouseDown={() => onColorChange(true)}
     style={{

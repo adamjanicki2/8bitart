@@ -1,3 +1,4 @@
+import { Box } from "@adamjanicki/ui";
 import { BlockPicker } from "react-color";
 
 type Props = {
@@ -8,23 +9,14 @@ type Props = {
 const COLORS = [
   "#000000",
   "#F4F4F4",
-  // gray
   "#999999",
-  // red
   "#E7040E",
-  // gold
   "#FFB701",
-  // yellow
   "#FFD701",
-  // green
   "#19A975",
-  // blue
   "#357EDE",
-  // purple
   "#A463F1",
-  // pink
   "#D5008E",
-  // light colors
   "#FF725C",
   "#FBF1A9",
   "#9EEBCF",
@@ -34,11 +26,11 @@ const COLORS = [
 
 const ColorPicker = ({ color, onColorChange }: Props) => {
   return (
-    <div style={{ borderRadius: "4px", border: "1px solid rgba(0,0,0,0.25)" }}>
+    <Box vfx={{ radius: "rounded" }}>
       <BlockPicker
         triangle="hide"
         color={color}
-        onChange={(c) => onColorChange(c.hex)}
+        onChange={({ hex }) => onColorChange(hex)}
         colors={[...COLORS]}
         styles={{
           default: {
@@ -51,7 +43,7 @@ const ColorPicker = ({ color, onColorChange }: Props) => {
           },
         }}
       />
-    </div>
+    </Box>
   );
 };
 

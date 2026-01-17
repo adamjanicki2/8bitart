@@ -1,4 +1,4 @@
-import type { GridSize, Grid } from "src/types";
+import type { Grid, GridSize } from "src/types";
 
 export const initPixels = (gridSize: GridSize): Grid => {
   const pixels: Grid = [];
