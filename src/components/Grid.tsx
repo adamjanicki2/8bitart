@@ -6,20 +6,11 @@ type Props = {
   grid: GridType;
   pixelSize: number | string;
   onColorChange: (row: number, col: number, force?: boolean) => void;
-  onBucketFill: () => void;
 };
 
-export default function Grid({
-  grid,
-  onColorChange,
-  pixelSize,
-  onBucketFill,
-}: Props) {
+export default function Grid({ grid, onColorChange, pixelSize }: Props) {
   return (
-    <Box
-      vfx={{ axis: "y", border: true, borderColor: "primary" }}
-      onClick={onBucketFill}
-    >
+    <Box vfx={{ axis: "y", border: true, borderColor: "primary" }}>
       {grid.map((row, i) => (
         <Box vfx={{ axis: "x" }} key={i}>
           {row.map((pixel, j) => (

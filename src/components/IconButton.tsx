@@ -2,7 +2,7 @@ import { IconButton as UIIconButton, Tooltip } from "@adamjanicki/ui";
 
 type Props = Pick<
   React.ComponentProps<typeof UIIconButton>,
-  "onClick" | "icon"
+  "onClick" | "icon" | "style"
 > & {
   label: string;
   selected?: boolean;

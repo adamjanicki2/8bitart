@@ -22,7 +22,9 @@ export default function Pixel({ pixel, row, col, onColorChange, size }: Props) {
       style={{
         width: size,
         height: size,
-        backgroundColor: pixel.color || EMPTY_COLOR_MAP[(row + col) & 1],
+        backgroundColor: pixel.color
+          ? `#${pixel.color}`
+          : EMPTY_COLOR_MAP[(row + col) & 1],
       }}
     />
   );

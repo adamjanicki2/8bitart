@@ -15,13 +15,13 @@ import {
   initPixels,
 } from "src/util";
 
-const DEFAULT_COLOR = "#000000";
+const DEFAULT_COLOR = "000000";
 const DEFAULT_GRID_SIZE = 16;
 
 const fillIcon = "M0 0H16V16H0Z" as IconType;
 
 export default function Controller() {
-  const [mode, setMode] = useState<"draw" | "fill" | "erase">("draw");
+  const [mode, setMode] = useState<"draw" | "erase">("draw");
   const [draw, setDraw] = useState(false);
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [gridSize, setGridSize] = useState<GridSize>(DEFAULT_GRID_SIZE);
@@ -79,9 +79,10 @@ export default function Controller() {
             />
             <IconButton
               icon={fillIcon}
-              onClick={() => setMode("fill")}
+              onClick={() => setGrid((grid) => fillGrid(grid, color))}
               label="Fill"
-              selected={mode === "fill"}
+              selected={false}
+              style={{ color: `#${color}`, boxShadow: "inset 0 0 0 1px black" }}
             />
             <IconButton
               icon={trash}
@@ -124,18 +125,15 @@ export default function Controller() {
           )}
           onColorChange={(row, col, force) =>
             setGrid((grid) => {
-              if (mode !== "fill" && (draw || force)) {
-                grid[row][col].color = mode === "draw" ? color : null;
-              }
-              return grid;
+              if (!draw && !force) return grid;
+              const nextGrid = grid.map((gridRow) => gridRow.slice());
+              nextGrid[row][col] = {
+                ...nextGrid[row][col],
+                color: mode === "draw" ? color : null,
+              };
+              return nextGrid;
             })
           }
-          onBucketFill={() => {
-            if (mode === "fill") {
-              setGrid((grid) => fillGrid(grid, color));
-              setMode("draw");
-            }
-          }}
         />
       </Box>
     </Box>
